@@ -11,7 +11,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
   })
-  .then(() => console.log("DB connected"));
+  .then(() => console.log("DB connected !!"));
 
 app.get("/", (req, res) => {
   res.send("hello from node");

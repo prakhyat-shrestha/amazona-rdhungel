@@ -259,24 +259,45 @@ exports.photo = (req, res, next) => {
 
 // S11
 exports.listSearch = (req, res) => {
-    // create query object to hold search value and category value
-    const query = {};
-    // assign search value to query.name
-    if (req.query.search) {
-        query.name = { $regex: req.query.search, $options: 'i' };
-        // assigne category value to query.category
-        if (req.query.category && req.query.category != 'All') {
-            query.category = req.query.category;
-        }
-        // find the product based on query object with 2 properties
-        // search and category
-        Product.find(query, (err, products) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
-            res.json(products);
-        }).select('-photo');
+  // create query object to hold search value and category value
+  const query = {};
+  // assign search value to query.name
+  if (req.query.search) {
+    query.name = { $regex: req.query.search, $options: "i" };
+    // assigne category value to query.category
+    if (req.query.category && req.query.category != "All") {
+      query.category = req.query.category;
     }
+    // find the product based on query object with 2 properties
+    // search and category
+    Product.find(query, (err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+      res.json(products);
+    }).select("-photo");
+  }
+};
+
+//s12
+exports.decreaseQuantity = (req, res, next) => {
+  let bulkOps = req.body.order.products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  Product.bulkWrite(bulkOps, {}, (error, products) => {
+    if (error) {
+      return res.status(400).json({
+        error: "Could not update product",
+      });
+    }
+    next();
+  });
 };

@@ -109,3 +109,27 @@ exports.purchaseHistory = (req, res) => {
       res.json(orders)
     })
 }
+
+// addToWishlist wishlist removeFromWishlist
+exports.addToWishlist = (req, res) => {
+  const { productId } = req.body
+
+  console.log("reqqq", req.profile)
+  console.log("got product id", productId)
+
+  const user = User.findOneAndUpdate(
+    { email: req.profile.email },
+    { $addToSet: { wishlist: productId } }
+  ).exec()
+
+  res.json({ ok: true })
+}
+
+exports.wishlist = async (req, res) => {
+  const list = await User.findOne({ email: req.profile.email })
+    .select("wishlist")
+    .populate("wishlist")
+    .exec()
+
+  res.json(list)
+}

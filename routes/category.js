@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
 const {
   create,
@@ -8,12 +8,13 @@ const {
   update,
   remove,
   list,
-} = require("../controllers/category");
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
-const { userById } = require("../controllers/user");
+  photo,
+} = require("../controllers/category")
+const { requireSignin, isAuth, isAdmin } = require("../controllers/auth")
+const { userById } = require("../controllers/user")
 
-router.post("/category/create/:userId", requireSignin, isAuth, isAdmin, create);
-router.get("/category/:categoryId", read);
+router.post("/category/create/:userId", requireSignin, isAuth, isAdmin, create)
+router.get("/category/:categoryId", read)
 
 router.put(
   "/category/:categoryId/:userId",
@@ -21,7 +22,7 @@ router.put(
   isAuth,
   isAdmin,
   update
-);
+)
 
 router.delete(
   "/category/:categoryId/:userId",
@@ -29,10 +30,11 @@ router.delete(
   isAuth,
   isAdmin,
   remove
-);
+)
 
-router.get("/categories", list);
+router.get("/categories", list)
+router.get("/category/photo/:categoryId", photo)
 
-router.param("userId", userById);
-router.param("categoryId", categoryById);
-module.exports = router;
+router.param("userId", userById)
+router.param("categoryId", categoryById)
+module.exports = router

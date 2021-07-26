@@ -7,7 +7,7 @@ const { errorHandler } = require("../helpers/dbErrorHandler")
 // S2
 exports.productById = (req, res, next, id) => {
   Product.findById(id)
-    .populate("category")
+    .populate("category", "-photo")
     .exec((err, product) => {
       if (err || !product) {
         return res.status(400).json({
@@ -287,7 +287,7 @@ exports.decreaseQuantity = (req, res, next) => {
     return {
       updateOne: {
         filter: { _id: item._id },
-        update: { $inc: { quantity: -item.count, sold: +item.count } },
+        update: { $inc: { quantity: -item.qty, sold: +item.qty } },
       },
     }
   })

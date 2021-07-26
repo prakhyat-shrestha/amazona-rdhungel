@@ -10,6 +10,7 @@ const {
 	purchaseHistory,
 	addToWishlist,
 	wishlist,
+	removeFromWishlist,
 } = require("../controllers/user")
 
 router.get("/secret/:userId", requireSignin, (req, res) => {
@@ -25,6 +26,12 @@ router.get("/orders/by/user/:userId", requireSignin, isAuth, purchaseHistory)
 // wishlist
 router.post("/user/wishlist/:userId", requireSignin, isAuth, addToWishlist)
 router.get("/user/wishlist/:userId", requireSignin, isAuth, wishlist)
+router.delete(
+	"/user/wishlist/:productId/:userId",
+	requireSignin,
+	isAuth,
+	removeFromWishlist
+)
 
 router.param("userId", userById)
 
